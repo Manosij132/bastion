@@ -19,6 +19,9 @@ jobs:
           client-id: 74025b64-fb08-467b-9d03-2146941c696f
           tenant-id: 25da0254-8640-4e13-9016-d3428661a477
           subscription-id: 972b29e5-b4b2-4f43-b814-02879737840d
+
+      - name: Check Azure Login Identity
+        run: az account show
             
       - name: Terraform fmt
         id: fmt
