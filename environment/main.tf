@@ -1,17 +1,17 @@
 module "rg" {
-  source   = "../Module/azurerm_resource_grp"
+  source   = "../modules/azurerm_resource_grp"
   rg-name  = var.rg_name
   location = var.location
 }
 module "vnet" {
-  source     = "../Module/azurerm_vnet"
+  source     = "../modules/azurerm_vnet"
   depends_on = [module.rg]
   vnet-name  = var.vnet_name
   location   = var.location
   rg-name    = var.rg_name
 }
 module "subnet" {
-  source         = "../Module/azurerm_subnet"
+  source         = "../modules/azurerm_subnet"
   depends_on     = [module.vnet]
   for_each       = var.subnet_map
   subnet-name    = each.value.subnet-name
@@ -20,14 +20,14 @@ module "subnet" {
   address-prefix = each.value.address-prefix
 }
 module "pip" {
-  source     = "../Module/azurerm_pip"
+  source     = "../modules/azurerm_pip"
   depends_on = [module.rg]
   pip-name   = var.pip_name
   rg-name    = var.rg_name
   location   = var.location
 }
 module "vm" {
-  source      = "../Module/azurerm_vm"
+  source      = "../modules/azurerm_vm"
   depends_on  = [module.subnet]
   nic-name    = var.nic_name
   location    = var.location
@@ -37,7 +37,7 @@ module "vm" {
   vnet-name   = var.vnet_name
 }
 module "bastion" {
-  source       = "../Module/azurerm_bastion"
+  source       = "../modules/azurerm_bastion"
   depends_on   = [module.pip, module.subnet]
   bastion-name = var.bastion_name
   location     = var.location
