@@ -28,10 +28,10 @@ jobs:
         
       - name: Terraform Init
         env:
-          ARM_CLIENT_ID: 74025b64-fb08-467b-9d03-2146941c696f
+          # ARM_CLIENT_ID: 74025b64-fb08-467b-9d03-2146941c696f
           # ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-          ARM_TENANT_ID: 25da0254-8640-4e13-9016-d3428661a477
-          ARM_SUBSCRIPTION_ID: 972b29e5-b4b2-4f43-b814-02879737840d
+          # ARM_TENANT_ID: 25da0254-8640-4e13-9016-d3428661a477
+          # ARM_SUBSCRIPTION_ID: 972b29e5-b4b2-4f43-b814-02879737840d
         id: init
         run: terraform init -input=false  
         working-directory: environment
