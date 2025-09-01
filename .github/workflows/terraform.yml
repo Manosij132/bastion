@@ -1,0 +1,70 @@
+name: "Infra Pipeline Kuch Bhi"
+
+on: workflow_dispatch
+
+permissions:
+  id-token: write
+  contents: read
+  
+jobs: 
+  terraform-init-plan:
+    runs-on: self-hosted
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v5.0.0
+    
+      - name: Azure Login
+        uses: Azure/login@v2.3.0
+        with:
+          client-id: 74025b64-fb08-467b-9d03-2146941c696f
+          tenant-id: 25da0254-8640-4e13-9016-d3428661a477
+          subscription-id: 972b29e5-b4b2-4f43-b814-02879737840d
+            
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+        working-directory: environment
+        
+      - name: Terraform Init
+        id: init
+        run: terraform init -input=false  
+        working-directory: environment
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+        working-directory: environment        
+      
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color -input=false
+        continue-on-error: true
+        working-directory: environment    
+        
+  terraform-apply:    
+    runs-on: self-hosted
+    needs: terraform-init-plan
+    environment: dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5.0.0
+    
+      - name: Azure Login
+        uses: Azure/login@v2.3.0
+        with:
+          client-id: 74025b64-fb08-467b-9d03-2146941c696f
+          tenant-id: 25da0254-8640-4e13-9016-d3428661a477
+          subscription-id: 972b29e5-b4b2-4f43-b814-02879737840d
+          
+      - name: Terraform Init
+        id: init
+        run: terraform init -input=false  
+        working-directory: environment
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply --auto-approve
+        continue-on-error: true
+        working-directory: environment              
+          
