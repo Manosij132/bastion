@@ -3,8 +3,7 @@ name: "Terraform Practise"
 on: workflow_dispatch
 
 permissions:
-  issues: write
-  pull-requests: write
+  id-token: write
 
 jobs:
   init-plan-fmt:
